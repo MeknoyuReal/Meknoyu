@@ -1,4 +1,4 @@
--- [[ MEKNOYU GUI (LOCKED & PROTECTED) - UPDATED WITH MM2 BUTTON ]] --
+-- [[ MEKNOYU GUI (LOCKED & PROTECTED) - UPDATED WITH FIX FOR TITLE & ANTI FLING ]] --
 local plr = game.Players.LocalPlayer
 local rs = game:GetService("RunService")
 local players = game:GetService("Players")
@@ -156,7 +156,7 @@ addTab("Tab Games", pageGames)
 local infoText = Instance.new("TextLabel", pageInfo)
 infoText.Size = UDim2.new(0.95, 0, 0, 200); infoText.Position = UDim2.new(0.025, 0, 0, 5); infoText.BackgroundTransparency = 1; infoText.TextColor3 = Color3.fromRGB(255, 255, 255); infoText.TextSize = 13; infoText.Font = Enum.Font.GothamMedium; infoText.TextWrapped = true; infoText.TextXAlignment = Enum.TextXAlignment.Left; infoText.TextYAlignment = Enum.TextYAlignment.Top; infoText.Text = "This script is strictly guarded and secure. There is no account theft or fraud. This script is securely protected, and no malicious bots will steal your data.\n\nCreated by Progaming Meknoyu Script"
 
--- // TAB GAMES CONTENT (MM2 BUTTON ADDED) //
+-- // TAB GAMES CONTENT //
 local function createGameBtn(name, parent, func)
     local b = Instance.new("TextButton", parent); b.Text = name; b.BackgroundColor3 = Color3.fromRGB(40, 40, 60); b.TextColor3 = Color3.new(1,1,1); b.Font = Enum.Font.GothamBold; b.TextSize = 10; Instance.new("UICorner", b)
     b.MouseButton1Click:Connect(func); return b
@@ -166,6 +166,10 @@ createGameBtn("Murder Mystery 2 Script", pageGames, function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/MeknoyuReal/Meknoyu/refs/heads/main/MeknoyuMM2.lua"))()
 end)
 
+createGameBtn("One Tap Script", pageGames, function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/MeknoyuReal/Meknoyu/refs/heads/main/MeknoyuOneTap.lua"))()
+end)
+
 -- // TOGGLE BUTTON CREATOR //
 local function createToggleBtn(name, key, parent)
     local b = Instance.new("TextButton", parent); b.Text = name .. " : OFF"; b.BackgroundColor3 = Color3.fromRGB(30, 30, 35); b.TextColor3 = Color3.new(1,1,1); b.Font = Enum.Font.GothamSemibold; b.TextSize = 10; Instance.new("UICorner", b)
@@ -173,7 +177,7 @@ local function createToggleBtn(name, key, parent)
         states[key] = not states[key]; b.Text = name .. " : " .. (states[key] and "ON" or "OFF"); b.BackgroundColor3 = states[key] and Color3.fromRGB(50, 50, 70) or Color3.fromRGB(30, 30, 35)
         if key == "noclip" and not states.noclip then for _, v in pairs(char:GetDescendants()) do if v:IsA("BasePart") then v.CanCollide = true end end
         elseif key == "esp" and not states.esp then for _, p in pairs(players:GetPlayers()) do if p.Character and p.Character:FindFirstChild("MeknoHighlight") then p.Character.MeknoHighlight:Destroy() end end
-        elseif key == "title" and not states.title then if char:FindFirstChild("Head") and char.Head:FindFirstChild("MeknoTitle") then char.Head.MeknoTitle:Destroy() end
+        elseif key == "title" and not states.title then if char and char:FindFirstChild("Head") and char.Head:FindFirstChild("MeknoTitle") then char.Head.MeknoTitle:Destroy() end; if plr.Character and plr.Character:FindFirstChild("Head") and plr.Character.Head:FindFirstChild("MeknoTitle") then plr.Character.Head.MeknoTitle:Destroy() end
         elseif key == "disco" then if states.disco then discoSky.Parent = lighting; skyText.Visible = true else discoSky.Parent = nil; skyText.Visible = false; lighting.Ambient = oldAmbient; lighting.OutdoorAmbient = oldOutdoor; lighting.FogColor = oldFog end
         elseif key == "hcxxr" and not states.hcxxr then lighting.Ambient = oldAmbient; lighting.OutdoorAmbient = oldOutdoor; for _, p in pairs(players:GetPlayers()) do if p.Character then for _, v in pairs(p.Character:GetDescendants()) do if v:IsA("Fire") and v.Name == "MeknoFire" then v:Destroy() end end end end
         elseif key == "addpart" and not states.addpart then if platformPart then platformPart:Destroy(); platformPart = nil end
@@ -246,7 +250,7 @@ rs.RenderStepped:Connect(function()
     if states.god then if hum.Health < 100000000 or hum.MaxHealth < 100000000 then hum.MaxHealth = 100000000; hum.Health = 100000000 end end
     if states.antirobux then mps.PromptPurchaseFinished:Connect(function() return nil end); mps.PromptProductPurchaseFinished:Connect(function() return nil end) end
     if states.antiafk then pcall(function() guiService:SetMenuIsOpen(false) end) end
-    if states.antirag or states.antifling then hum:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false); hum:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false); if hrp then if states.antifling then hrp.Velocity = Vector3.new(0, 0, 0); hrp.RotVelocity = Vector3.new(0, 0, 0); for _, part in pairs(char:GetDescendants()) do if part:IsA("BasePart") then part.CanCollide = true end end end; if hrp.Velocity.Magnitude > 75 or hrp.RotVelocity.Magnitude > 75 then if lastPos and not states.speed then hrp.Velocity = Vector3.new(0, 0, 0); hrp.RotVelocity = Vector3.new(0, 0, 0); hrp.CFrame = lastPos end end end end
+    if states.antirag or states.antifling then hum:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false); hum:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false); if hrp then if states.antifling then for _, part in pairs(char:GetDescendants()) do if part:IsA("BasePart") then part.CanCollide = true end end end; if hrp.Velocity.Magnitude > 75 or hrp.RotVelocity.Magnitude > 75 then if lastPos and not states.speed then if hrp.Velocity.Magnitude > 75 then hrp.CFrame = lastPos end end end end end
     if states.fling then for _, p in pairs(players:GetPlayers()) do if p ~= plr and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then local targetHrp = p.Character.HumanoidRootPart; local dist = (targetHrp.Position - hrp.Position).Magnitude; if dist < 4.5 then targetHrp.Velocity = Vector3.new(0, 45000, 0); targetHrp.RotVelocity = Vector3.new(35000, 35000, 35000); hrp.Velocity = Vector3.new(0, 0, 0); hrp.RotVelocity = Vector3.new(0, 0, 0); if lastPos then hrp.CFrame = lastPos end end end end end
     if states.antitel and lastPos then local distance = (hrp.Position - lastPos.Position).Magnitude; if distance > 40 and not (states.speed or states.tooltp or states.savepos or states.tpKill or states.antifling) then hrp.Velocity = Vector3.new(0,0,0); hrp.CFrame = lastPos else lastPos = hrp.CFrame end else lastPos = hrp.CFrame end
     if states.addpart then if not platformPart or not platformPart.Parent then platformPart = Instance.new("Part"); platformPart.Name = "MeknoPlatform"; platformPart.Size = Vector3.new(7, 1, 7); platformPart.Anchored = true; platformPart.Material = Enum.Material.Neon; platformPart.Color = Color3.fromRGB(150, 0, 0); platformPart.Parent = workspace end; platformPart.CFrame = CFrame.new(hrp.Position.X, hrp.Position.Y - 3.5, hrp.Position.Z) end
@@ -256,7 +260,7 @@ rs.RenderStepped:Connect(function()
     if states.hcxxr then lighting.Ambient = Color3.fromRGB(255, 0, 0); lighting.OutdoorAmbient = Color3.fromRGB(150, 0, 0); for _, p in pairs(players:GetPlayers()) do if p.Character and p.Character:FindFirstChild("HumanoidRootPart") then local root = p.Character.HumanoidRootPart; if not root:FindFirstChild("MeknoFire") then local f = Instance.new("Fire", root); f.Name = "MeknoFire"; f.Heat = 25; f.Size = 15; f.Color = Color3.fromRGB(255, 0, 0); f.SecondaryColor = Color3.fromRGB(100, 0, 0) end; for _, part in pairs(p.Character:GetDescendants()) do if part:IsA("BasePart") or part:IsA("Decal") then if part.Name == "HumanoidRootPart" then continue end; part.Transparency = 0 end end end end end
     if states.aimActive and not states.tpKill then local target = nil; local shortDistance = math.huge; for _, p in pairs(players:GetPlayers()) do if p ~= plr and p.Character and p.Character:FindFirstChild("Head") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then if not plr.Team or p.Team ~= plr.Team or plr.Team == nil then local head = p.Character.Head; local currentDist = (head.Position - hrp.Position).Magnitude; if currentDist < shortDistance then target = head; shortDistance = currentDist end end end end; if target then cam.CFrame = CFrame.lookAt(cam.CFrame.Position, target.Position); local currentTool = char:FindFirstChildOfClass("Tool"); if currentTool then currentTool:Activate() end end end
     if states.esp then for _, p in pairs(players:GetPlayers()) do if p ~= plr and p.Character and not p.Character:FindFirstChild("MeknoHighlight") then Instance.new("Highlight", p.Character).Name = "MeknoHighlight" end end end
-    if states.title and char:FindFirstChild("Head") then local head = char.Head; local t = head:FindFirstChild("MeknoTitle") or Instance.new("BillboardGui", head); t.Name = "MeknoTitle"; t.Size = UDim2.new(0,200,0,50); t.AlwaysOnTop = true; t.ExtentsOffset = Vector3.new(0,3,0); local txt = t:FindFirstChild("TextLabel") or Instance.new("TextLabel", t); txt.Size = UDim2.new(1,0,1,0); txt.BackgroundTransparency = 1; txt.TextColor3 = Color3.new(1,0,0); txt.Font = Enum.Font.GothamBold; txt.TextSize = 18; txt.Text = "Meknoyu Here" end
+    if states.title then local head = plr.Character and plr.Character:FindFirstChild("Head"); if head then local t = head:FindFirstChild("MeknoTitle"); if not t then t = Instance.new("BillboardGui"); t.Name = "MeknoTitle"; t.Size = UDim2.new(0, 200, 0, 50); t.AlwaysOnTop = true; t.Adornee = head; t.StudsOffset = Vector3.new(0, 3, 0); local txt = Instance.new("TextLabel", t); txt.Size = UDim2.new(1, 0, 1, 0); txt.BackgroundTransparency = 1; txt.TextColor3 = Color3.fromRGB(255, 0, 0); txt.Font = Enum.Font.GothamBold; txt.TextSize = 18; txt.Text = "Meknoyu Here"; t.Parent = head end end elseif not states.title then if plr.Character and plr.Character:FindFirstChild("Head") and plr.Character.Head:FindFirstChild("MeknoTitle") then plr.Character.Head.MeknoTitle:Destroy() end end
     if states.noclip then for _, v in pairs(char:GetDescendants()) do if v:IsA("BasePart") then v.CanCollide = false end end end
     if states.speed and hum.MoveDirection.Magnitude > 0 then hrp.CFrame = hrp.CFrame + (hum.MoveDirection * 1.5) end
 end)
